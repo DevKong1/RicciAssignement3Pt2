@@ -1,12 +1,10 @@
-const express = require('express')
+const express = require("express")
 const router = express.Router()
-const controller = require('../controllers/controller')
+const controller = require("../controllers/controller")
 
 router
-	.get("/players/getAll", controller.getPlayers) // GET all players
-    .get("/players/getOne/:playerID") // GET a player given an ID
-    .post("/players/addOne") // Adds a player
-    .delete("/players/removeAll") // Removes all players
-    .delete("/players/removeOne/:playerID") // Removes a player given an ID
+	.get("/players/getPlayers", controller.getPlayers) // GET players
+    .post("/players/addOne", controller.addOne) // Adds a player
+    .delete("/players/removePlayers", controller.removePlayers); // Removes defined players
 
-module.exports = router;
+module.exports = router

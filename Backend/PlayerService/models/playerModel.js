@@ -7,7 +7,9 @@ const playerSchema = new mongoose.Schema({
     },
     color: {
         type: String,
-        required: true
+        required: true,
+        unique: true,
+        dropDups: true 
     }
 });
 
