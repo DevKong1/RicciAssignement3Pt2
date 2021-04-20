@@ -2,7 +2,6 @@ const express = require("express")
 const dotenv = require("dotenv")
 const cors = require("cors")
 const mongoose = require("mongoose")
-const bodyParser = require("body-parser")
 
 // Load .env
 dotenv.config()
@@ -24,9 +23,9 @@ app.use(cors())
 app.use(express.json());
 
 // Routes
-app.use("/", require("./routes/playerRoutes"))
+app.use("/", require("./routes/puzzleRoutes"))
 
 const PORT = process.env.PORT
 app.listen(PORT, function () {
-	console.log('PlayerService started on port ' + PORT)
+	console.log('PuzzleService started on port ' + PORT)
 });
