@@ -19,6 +19,9 @@ mongoose.connect(db, {useNewUrlParser: true,
 // Initialize cors               
 app.use(cors())
 
+// Allow access to asset files
+app.use('/assets', express.static(process.cwd() + '/assets'))
+
 // Body Parser
 app.use(express.json());
 
