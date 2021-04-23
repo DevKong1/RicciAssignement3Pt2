@@ -1,10 +1,6 @@
 const mongoose = require("mongoose")
 
 const puzzleTileSchema = new mongoose.Schema({
-    tileID: {
-        type: String,
-        required: true
-    },
     source: {
         type: String,
         required: true
@@ -19,6 +15,6 @@ const puzzleTileSchema = new mongoose.Schema({
         type: Number,
         required: true
     }
-});
+})
 
 module.exports = mongoose.model("puzzleTile", puzzleTileSchema)

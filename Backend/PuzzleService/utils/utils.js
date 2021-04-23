@@ -30,8 +30,22 @@ exports.sliceAndSaveTiles = async function(image, rows, cols) {
             await sharp(image)
                   .extract({ width: tileWidth, height: tileheight, left: tileWidth*y, top: tileheight*x })
                   .toFile(file)
-            result.push(i++, file)
+            result.push([i++, file])
         }
     }
     return result
+}
+
+// Generates an array of n elements, each represents a random position generated for a tile
+exports.randomTilePositions = function(n) {
+    const numbers = Array(n).fill().map((_, index) => index)
+    return numbers.sort(() => Math.random() - 0.5)
+}
+
+// Hides the final positions for each tile
+exports.hideFinalPositions = function(tiles) {
+    if(!Array.isArray(tiles))
+        tiles = [tiles]
+    
+    return tiles.map(({finalPosition, ...attributes}) => attributes)
 }
