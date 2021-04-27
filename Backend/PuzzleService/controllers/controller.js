@@ -8,7 +8,7 @@ const cols = 5
 const rows = 3
 
 // Create a new puzzle
-exports.newPuzzle = async function(req, res) {
+async function newPuzzle() {
     try {
         await PuzzleTile.deleteMany({})
         // Delete * from slices folder
@@ -20,9 +20,11 @@ exports.newPuzzle = async function(req, res) {
         for (let i = 0; i < (cols*rows); i++) {
             data.push(await PuzzleTile.create({source: tiles[i][1], position: randomPositions[i], finalPosition: tiles[i][0]}))
         }
-        res.json(utils.hideFinalPositions(data))
+
+        return utils.hideFinalPositions(JSON.parse(JSON.stringify(data)))      
     } catch {
-        res.status(500).json({error: "Error inserting data into DB"})
+        console.log("Error creating puzzle")
+        return []
     }
 }
 
@@ -30,6 +32,11 @@ exports.newPuzzle = async function(req, res) {
 exports.getPuzzle = async function(req, res) {
     try {
         let data = await PuzzleTile.find().lean()
+        // If the puzzle hasn't been initialized
+        if(data.length <= 0) {
+            data = await newPuzzle()
+        }
+
         res.json(utils.hideFinalPositions(data))
     } catch {
         res.status(500).json({error: "Error retrieving data from DB"})
@@ -61,7 +68,7 @@ exports.selectTile = async function(req, res) {
 
         tile.selectedPlayer = req.query.playerID
         await tile.save()
-        res.json({result: "Success"})
+        res.json(utils.hideFinalPositions(JSON.parse(JSON.stringify(tile))))
     } catch(e) {
         res.status(400).json({error: e})
     }
@@ -76,7 +83,7 @@ exports.deselectTile = async function(req, res) {
 
         tile.selectedPlayer = undefined
         await tile.save()
-        res.json({result: "Success"})
+        res.json(utils.hideFinalPositions(JSON.parse(JSON.stringify(tile))))
     } catch(e) {
         res.status(400).json({error: e})
     }
@@ -106,7 +113,7 @@ exports.swapTiles = async function(req, res) {
 
         res.json({  data: data,
                     done: data.map(el => el.finalPosition == el.position)
-                            .reduce((el1, el2) => el1 && el2)})
+                              .reduce((el1, el2) => el1 && el2)})
 
     } catch(e) {
         res.status(400).json({error: e})

@@ -21,7 +21,7 @@ exports.addOne = async function(req, res) {
         let data = await Player.create(req.body)
         res.json(data)
     } catch {
-        res.status(400).json({error: "Invalid duplicate playerID or color"})
+        res.status(400).json({error: "Error duplicate playerID or color"})
     }
 }
 

@@ -46,6 +46,5 @@ exports.randomTilePositions = function(n) {
 exports.hideFinalPositions = function(tiles) {
     if(!Array.isArray(tiles))
         tiles = [tiles]
-    
     return tiles.map(({finalPosition, ...attributes}) => attributes)
 }
