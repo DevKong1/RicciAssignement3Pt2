@@ -10,7 +10,7 @@ exports.socket = async function(server) {
     const io = socket(server)
 
     // Run when client connects
-    io.on('connection', async client => {
+    io.on("connection", async client => {
         try {
             // Generate a random color for the new player
             let players = await axios.get(playerService + "/players/getPlayers")
@@ -35,7 +35,7 @@ exports.socket = async function(server) {
         }
 
         
-        client.on('selectTile', async tile => {
+        client.on("selectTile", async tile => {
             try {            
                 let data = await axios.put(puzzleService + "/puzzle/selectTile", { tileID: tile, playerID: client.id })
                 io.emit("selectedTile", data)
@@ -47,7 +47,7 @@ exports.socket = async function(server) {
             }
         })
 
-        client.on('deselectTile', async tile => {
+        client.on("deselectTile", async tile => {
             try {            
                 if(tile.selectedPlayer !== client.id) throw "Invalid player"
 
@@ -61,7 +61,7 @@ exports.socket = async function(server) {
             }
         })
 
-        client.on('swapTile;', async tile => {
+        client.on("swapTile", async tile => {
             try {            
                 let data = await axios.put(puzzleService + "/puzzle/swapTiles", { tileID: tile, playerID: client.id  })
                 io.emit("puzzle", data.data)
