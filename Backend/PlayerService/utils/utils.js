@@ -5,7 +5,7 @@ exports.retrieveQueryParamsIn = function(req, ...args) {
         if(req.query[args[i]] != null) {
             query[args[i]] = { 
                 $in: req.query[args[i]]
-            };
+            }
         }
     }
     return query

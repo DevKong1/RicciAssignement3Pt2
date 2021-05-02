@@ -105,15 +105,15 @@ exports.swapTiles = async function(req, res) {
         if(tile.selectedPlayer != undefined && tile.selectedPlayer != req.query.playerID) throw "Tile is already selected by another player"
         if(tile._id.equals(selectedTile[0]._id)) throw "Selected the same tile twice"
 
-        await PuzzleTile.findByIdAndUpdate(selectedTile[0]._id, {position: tile.position})
-        await PuzzleTile.findByIdAndUpdate(tile._id, {position: selectedTile[0].position})
+        await PuzzleTile.findByIdAndUpdate(selectedTile[0]._id, { position: tile.position })
+        await PuzzleTile.findByIdAndUpdate(tile._id, { position: selectedTile[0].position })
 
         // Check if puzzle is correct
         let data = await PuzzleTile.find().lean()
 
         res.json({  data: data,
                     done: data.map(el => el.finalPosition == el.position)
-                              .reduce((el1, el2) => el1 && el2)})
+                              .reduce((el1, el2) => el1 && el2) })
 
     } catch(e) {
         res.status(400).json({error: e})
