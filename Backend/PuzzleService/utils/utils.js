@@ -26,6 +26,7 @@ exports.sliceAndSaveTiles = async function(image, rows, cols) {
     let i = 0
     for (let x = 0; x < rows; x++) {      
         for (let y = 0; y < cols; y++) {
+            //TODO File name is spoiler
             let file = path.join(process.env.SLICES_PATH, i + ".jpg")
             await sharp(image)
                   .extract({ width: tileWidth, height: tileheight, left: tileWidth*y, top: tileheight*x })

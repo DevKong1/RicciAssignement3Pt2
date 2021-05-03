@@ -4,7 +4,11 @@
   "description": "Backend for Collaborative Puzzle Web App",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "postinstall": "(cd PlayerService && npm i); (cd PuzzleService && npm i); (cd SocketService && npm i);",
+    "player": "cd PlayerService && node index",
+    "puzzle": "cd PuzzleService && node index",
+    "socket": "cd SocketService && node index",
+    "deploy": "npm-run-all --parallel player puzzle socket"
   },
   "repository": {
     "type": "git",
@@ -15,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/mcnuggetboii/RicciAssignement3Pt2/issues"
   },
-  "homepage": "https://github.com/mcnuggetboii/RicciAssignement3Pt2#readme"
+  "homepage": "https://github.com/mcnuggetboii/RicciAssignement3Pt2#readme",
+  "devDependencies": {
+    "npm-run-all": "^4.1.5"
+  }
 }
