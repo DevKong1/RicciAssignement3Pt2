@@ -16,8 +16,26 @@ import { defineComponent } from 'vue';
 export default defineComponent({
   name: 'HelloWorld',
   sockets: {
-      connect: function () {
-          console.log('socket connected')
+      self: function (data) {
+          console.log("self" + data)
+      },
+      players: function (data) {
+          console.log("players" + data)
+      },
+      puzzle: function (data) {
+          console.log("puzzle" + data)
+      },
+      selectedTile: function (data) {
+          console.log("selectedTile" + data)
+      },
+      deselectedTile: function (data) {
+          console.log("deselectedTile" + data)
+      },
+      complete: function (data) {
+          console.log("complete" + data)
+      },
+      error: function (data) {
+          console.log("error" + data)
       }
   },
   props: {

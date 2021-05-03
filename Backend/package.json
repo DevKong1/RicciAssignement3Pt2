@@ -6,9 +6,13 @@
   "scripts": {
     "postinstall": "(cd PlayerService && npm i); (cd PuzzleService && npm i); (cd SocketService && npm i);",
     "player": "cd PlayerService && node index",
+    "testplayer": "cd PlayerService && nodemon index",
     "puzzle": "cd PuzzleService && node index",
+    "testpuzzle": "cd PuzzleService && nodemon index",
     "socket": "cd SocketService && node index",
-    "deploy": "npm-run-all --parallel player puzzle socket"
+    "testsocket": "cd SocketService && nodemon index",
+    "deploy": "npm-run-all --parallel player puzzle socket",
+    "debug": "npm-run-all --parallel testplayer testpuzzle testsocket"
   },
   "repository": {
     "type": "git",
