@@ -4,14 +4,13 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-import Puzzle from '@/components/Puzzle.vue'; // @ is an alias to /src
+<script>
+import Puzzle from '@/components/Puzzle.vue'
 
-export default defineComponent({
+export default {
   name: 'Home',
   components: {
-    Puzzle,
-  },
-});
+    Puzzle
+  }
+}
 </script>

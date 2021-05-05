@@ -8,7 +8,7 @@ exports.socket = async function(server) {
         cors: {
           origin: '*',
         }
-      });
+      })
 
       // Load .env variables
       const playerService = process.env.PLAYER_SERVICE
@@ -19,8 +19,10 @@ exports.socket = async function(server) {
         try {
             // Generate a random color for the new player
             let {data: oldPlayers} = await axios.get(playerService + "/players/getPlayers")
-            var playerColor = utils.randomColor(oldPlayers.map(el => el.color)) //BUG
+            console.log("as")
+            var playerColor = utils.randomColor(oldPlayers.map(el => el.color)) 
 
+            console.log(playerColor)
             // Add the new player
             let {data: self} = await axios.post(playerService + "/players/addOne", { playerID: client.id, color: playerColor })
             client.emit("self", self)
