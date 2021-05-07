@@ -1,10 +1,10 @@
 <template>
-  <div id="sudoku-demo" class="demo">
+  <div id="puzzle">
     <h1>Concurrent Puzzle</h1>
     <p>Combine your skills with other players and solve the puzzle.</p>
-    <div name="cell" tag="div" class="container">
-      <div v-for="cell in cells" :key="cell.id" class="cell">
-        {{ cell }}
+    <div tag="div" class="container">
+      <div v-for="tile in puzzle" :key="tile._id" class="tile">
+        <img :src="'http://localhost:3030/' + tile.source" alt=""/>
       </div>
     </div>
   </div>
@@ -13,21 +13,28 @@
 <script>
 export default {
   name: 'Puzzle',
+  data() {
+    return {
+      self: null,
+      players: [],
+      puzzle: []
+    }
+  },
   sockets: {
       self(data) {
-          console.log("self" + data)
+          this.self = data
       },
       players(data) {
-          console.log("players" + data)
+          this.players = data
       },
       puzzle(data) {
-          console.log("puzzle" + data)
+          this.puzzle = data
       },
       selectedTile(data) {
-          console.log("selectedTile" + data)
+          this.puzzle[this.puzzle.findIndex(el => el._id === data._id)].selectedPlayer = data.selectedPlayer
       },
       deselectedTile(data) {
-          console.log("deselectedTile" + data)
+          delete this.puzzle[this.puzzle.findIndex(el => el._id === data._id)].selectedPlayer
       },
       complete(data) {
           console.log("complete" + data)
@@ -35,14 +42,6 @@ export default {
       error(data) {
           console.log("error" + data)
       }
-  },
-  props: {
-    msg: String,
-  },
-  data() {
-    return {
-      cells: [4,8,14,16,23,42]
-    }
   },
   methods: {
   }
@@ -65,20 +64,21 @@ li {
 a {
   color: #42b983;
 }
-.container {
+#puzzle {
   display: flex;
-  flex-wrap: wrap;
-  width: 238px;
-  margin-top: 10px;
-}
-.cell {
-  display: flex;
-  justify-content: space-around;
+  flex-direction: column;
   align-items: center;
-  width: 25px;
-  height: 25px;
-  border: 1px solid #aaa;
-  margin-right: -1px;
-  margin-bottom: -1px;
+}
+.container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  grid-column-gap: 1vmin;
+  grid-row-gap: 1vmin;
+}
+.tile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
