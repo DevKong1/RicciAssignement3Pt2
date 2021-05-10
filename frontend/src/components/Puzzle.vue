@@ -3,16 +3,19 @@
     <h1>Concurrent Puzzle</h1>
     <p>Combine your skills with other players and solve the puzzle.</p>
     <div tag="div" class="container">
-      <div v-for="tile in puzzle" :key="tile._id" class="tile">
-        <img :src="'http://localhost:3030/' + tile.source" alt=""/>
-      </div>
+      <Tile v-for="tile in puzzle" :key="tile._id" :data="tile" />
     </div>
   </div>
 </template>
 
 <script>
+import Tile from '@/components/Tile.vue'
+
 export default {
   name: 'Puzzle',
+  components: {
+    Tile
+  },
   data() {
     return {
       self: null,
@@ -48,37 +51,42 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-#puzzle {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.container {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  grid-column-gap: 1vmin;
-  grid-row-gap: 1vmin;
-}
-.tile {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+  h3 {
+    margin: 40px 0 0;
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  li {
+    display: inline-block;
+    margin: 0 10px;
+  }
+
+  a {
+    color: #42b983;
+  }
+
+  #puzzle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    grid-column-gap: 1vmin;
+    grid-row-gap: 1vmin;
+  }
+
+  .tile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 </style>

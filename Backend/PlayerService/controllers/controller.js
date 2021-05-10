@@ -29,7 +29,6 @@ exports.addOne = async function(req, res) {
 exports.removePlayers = async function(req, res) {
     // Retrieve playerIDs from request query, if unset removes all
     let query = utils.retrieveQueryParamsIn(req, "playerID")
-
     try {
         await Player.deleteMany(query)
         res.json({result: "Success"})

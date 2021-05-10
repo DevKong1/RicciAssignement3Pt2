@@ -1,7 +1,7 @@
 const socket = require("socket.io")
 const axios = require("axios")
 const utils = require("./utils/utils")
-
+const chalk = require("chalk")
 
 exports.socket = async function(server) {
     const io = socket(server, {
@@ -19,10 +19,8 @@ exports.socket = async function(server) {
         try {
             // Generate a random color for the new player
             let {data: oldPlayers} = await axios.get(playerService + "/players/getPlayers")
-            console.log("as")
             var playerColor = utils.randomColor(oldPlayers.map(el => el.color)) 
 
-            console.log(playerColor)
             // Add the new player
             let {data: self} = await axios.post(playerService + "/players/addOne", { playerID: client.id, color: playerColor })
             client.emit("self", self)
@@ -35,19 +33,36 @@ exports.socket = async function(server) {
             let {data: puzzle} = await axios.get(puzzleService + "/puzzle/getPuzzle")
             client.emit("puzzle", puzzle)
 
-            console.log(`New player connected: %c${client.id}` ,`color:${playerColor}`)
+            console.log(chalk.hex(playerColor)(`New player connected: %c${client.id}`))
         } catch {
             console.log(client.id + ": Error adding player")
             client.emit("error")
         }
 
+        client.on("disconnect", async () => {
+            try {            
+                let {data: tile} = await axios.put(puzzleService + "/puzzle/deselectTile", { playerID: client.id })
+
+                if(tile.length > 0){
+                    io.emit("deselectedTile", tile)
+                }
+
+                let {data: players} = await axios.delete(playerService + "/players/removePlayers", { params: { playerID: client.id } })
+                io.emit("players", players)
+
+                console.log(chalk.hex(playerColor)(`${client.id} disconnected`))
+            } catch {
+                console.log(client.id + ": Error disconnecting client")
+                client.emit("error")
+            }
+        })
         
         client.on("selectTile", async tile => {
             try {            
                 let {data: data} = await axios.put(puzzleService + "/puzzle/selectTile", { tileID: tile, playerID: client.id })
                 io.emit("selectedTile", data)
 
-                console.log(`%c${client.id} selected tile ${tile._id}` ,`color:${playerColor}`)
+                console.log(chalk.hex(playerColor)(`${client.id} selected tile ${tile._id}`))
             } catch {
                 console.log(client.id + ": Error selecting tile")
                 client.emit("error")
@@ -61,7 +76,7 @@ exports.socket = async function(server) {
                 let {data: data} = await axios.put(puzzleService + "/puzzle/deselectTile", { tileID: tile })
                 io.emit("deselectedTile", data)
 
-                console.log(`%c${client.id} deselected tile ${tile._id}` ,`color:${playerColor}`)
+                console.log(chalk.hex(playerColor)(`${client.id} deselected tile ${tile._id}`))
             } catch(e) {
                 console.log(client.id + ": " + e)
                 client.emit("error", e)
@@ -73,7 +88,7 @@ exports.socket = async function(server) {
                 let {data: data} = await axios.put(puzzleService + "/puzzle/swapTiles", { tileID: tile, playerID: client.id  })
                 io.emit("puzzle", data.data)
 
-                console.log(`%c${client.id} swapped selected tile with ${tile._id}` ,`color:${playerColor}`)
+                console.log(chalk.hex(playerColor)(`${client.id} swapped selected tile with ${tile._id}`))
 
                 // Check if puzzle is complete
                 if(data.done){
@@ -84,7 +99,7 @@ exports.socket = async function(server) {
                     let {data: puzzle} = await axios.get(puzzleService + "/puzzle/getPuzzle")
                     io.emit("puzzle", puzzle)
 
-                    console.log(`%c${client.id} has completed the puzzle thus a new puzzle has been generated!` ,`color:${playerColor}`)
+                    console.log(chalk.hex(playerColor)(`${client.id} has completed the puzzle thus a new puzzle has been generated!`))
                 }
             } catch(e) {
                 console.log(client.id + ": " + e)
