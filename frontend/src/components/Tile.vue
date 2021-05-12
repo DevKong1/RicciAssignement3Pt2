@@ -1,13 +1,24 @@
 <template>
-  <div class="tile">
-      <img :src="'http://localhost:3030/' + data.source" alt=""/>
+  <div class="tile" v-on:click="$emit('tileClick', data)">
+      <img :style="this.style" :src="'http://localhost:3030/' + data.source" alt=""/>
   </div>
 </template>
 
 <script>
 export default {
   name: 'Puzzle',
-  props: ["data"]
+  props: ['data', 'players'],
+  methods: {
+    getColor(id) {
+      return this.players.find(el => el.playerID == id).color
+    }
+  },
+  computed: {
+    style() {
+      let selectedID = this.data.selectedPlayer
+      return selectedID != null ? `border: 7px solid ${this.getColor(selectedID)}` : '' 
+    }
+  }
 }
 </script>
 

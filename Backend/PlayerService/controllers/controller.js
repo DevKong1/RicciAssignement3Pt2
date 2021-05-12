@@ -31,7 +31,8 @@ exports.removePlayers = async function(req, res) {
     let query = utils.retrieveQueryParamsIn(req, "playerID")
     try {
         await Player.deleteMany(query)
-        res.json({result: "Success"})
+        let data = await Player.find().lean()
+        res.json(data)
     } catch {
         res.status(500).json({error: "Error removing data from DB"})
     }

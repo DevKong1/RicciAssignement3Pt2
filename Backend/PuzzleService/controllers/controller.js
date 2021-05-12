@@ -20,7 +20,7 @@ async function newPuzzle() {
         for (let i = 0; i < (cols*rows); i++) {
             data.push(await PuzzleTile.create({source: tiles[i][1], position: randomPositions[i], finalPosition: tiles[i][0]}))
         }
-        objs.sort((a,b) => (a.last_nom > b.last_nom) ? 1 : ((b.last_nom > a.last_nom) ? -1 : 0))
+        data.sort((a,b) => (a.position > b.position) ? 1 : ((b.position > a.position) ? -1 : 0))
         return utils.hideFinalPositions(JSON.parse(JSON.stringify(data)))      
     } catch {
         console.log("Error creating puzzle")
@@ -91,11 +91,10 @@ exports.deselectTile = async function(req, res) {
         } 
         // Deselect by player ID
         else if(req.body.playerID != null) {
-            tile = await PuzzleTile.find( { selectedPlayer: req.body.playerID } ).lean()     
+            tile = await PuzzleTile.find( { selectedPlayer: req.body.playerID } ).lean()   
             if (tile.length > 0) {
-                tile[0].selectedPlayer = undefined
-                await tile[0].save()
-                res.json(utils.hideFinalPositions(JSON.parse(JSON.stringify(tile))))
+                let result = await PuzzleTile.findByIdAndUpdate(tile[0]._id, { $unset: {selectedPlayer: 1 } })
+                res.json(utils.hideFinalPositions(JSON.parse(JSON.stringify(result))))
             } else {
                 res.json()
             }
@@ -121,7 +120,7 @@ exports.swapTiles = async function(req, res) {
         if(tile.selectedPlayer != undefined && tile.selectedPlayer != req.body.playerID) throw "Tile is already selected by another player"
         if(tile._id.equals(selectedTile[0]._id)) throw "Selected the same tile twice"
 
-        await PuzzleTile.findByIdAndUpdate(selectedTile[0]._id, { position: tile.position })
+        await PuzzleTile.findByIdAndUpdate(selectedTile[0]._id, { position: tile.position, $unset: {selectedPlayer: 1 } })
         await PuzzleTile.findByIdAndUpdate(tile._id, { position: selectedTile[0].position })
 
         // Check if puzzle is correct

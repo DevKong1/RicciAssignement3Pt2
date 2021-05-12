@@ -33,7 +33,7 @@ exports.socket = async function(server) {
             let {data: puzzle} = await axios.get(puzzleService + "/puzzle/getPuzzle")
             client.emit("puzzle", puzzle)
 
-            console.log(chalk.hex(playerColor)(`New player connected: %c${client.id}`))
+            console.log(chalk.hex(playerColor)(`New player connected: ${client.id}`))
         } catch {
             console.log(client.id + ": Error adding player")
             client.emit("error")
@@ -58,11 +58,11 @@ exports.socket = async function(server) {
         })
         
         client.on("selectTile", async tile => {
-            try {            
+            try {        
                 let {data: data} = await axios.put(puzzleService + "/puzzle/selectTile", { tileID: tile, playerID: client.id })
                 io.emit("selectedTile", data)
 
-                console.log(chalk.hex(playerColor)(`${client.id} selected tile ${tile._id}`))
+                console.log(chalk.hex(playerColor)(`${client.id} selected tile ${tile}`))
             } catch {
                 console.log(client.id + ": Error selecting tile")
                 client.emit("error")
@@ -71,12 +71,10 @@ exports.socket = async function(server) {
 
         client.on("deselectTile", async tile => {
             try {            
-                if(tile.selectedPlayer !== client.id) throw "Invalid player"
-
                 let {data: data} = await axios.put(puzzleService + "/puzzle/deselectTile", { tileID: tile })
                 io.emit("deselectedTile", data)
 
-                console.log(chalk.hex(playerColor)(`${client.id} deselected tile ${tile._id}`))
+                console.log(chalk.hex(playerColor)(`${client.id} deselected tile ${tile}`))
             } catch(e) {
                 console.log(client.id + ": " + e)
                 client.emit("error", e)
@@ -88,7 +86,7 @@ exports.socket = async function(server) {
                 let {data: data} = await axios.put(puzzleService + "/puzzle/swapTiles", { tileID: tile, playerID: client.id  })
                 io.emit("puzzle", data.data)
 
-                console.log(chalk.hex(playerColor)(`${client.id} swapped selected tile with ${tile._id}`))
+                console.log(chalk.hex(playerColor)(`${client.id} swapped selected tile with ${tile}`))
 
                 // Check if puzzle is complete
                 if(data.done){
