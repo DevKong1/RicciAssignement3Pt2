@@ -37,13 +37,16 @@ export default {
       this.puzzle = data
     },
     selectedTile(data) {
+      // Modify the selected Tile by setting its selectedPlayer property
       this.puzzle = this.puzzle.map(el => el._id === data[0]._id ? {...el, selectedPlayer: data[0].selectedPlayer} : el)
     },
     deselectedTile(data) {
+      // Modify the deselected Tile by removing its selectedPlayer property
       this.puzzle = this.puzzle.map(({selectedPlayer, ...el}) => el._id === data[0]._id ? el : ({selectedPlayer, ...el}))
     },
     complete(data) {
-      console.log("Complete " + data)
+      alert("Puzzle Completed!")
+      console.log(data)
     },
     error(data) {
       console.log("Error " + data)
