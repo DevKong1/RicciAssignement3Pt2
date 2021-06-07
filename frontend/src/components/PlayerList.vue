@@ -22,18 +22,23 @@ export default {
 
 <style scoped>
     #playerList {
-        align-items: center;
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
     }
 
     .playerRow {
-        height: 40px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .colorBox {
-        float: left;
-        width: 20px;
-        height: 20px;
-        margin: 5px;
-        border: 1px solid rgba(0, 0, 0, .2);
+      float: left;
+      width: 20px;
+      height: 20px;
+      margin: 5px;
+      border: 1px solid rgba(0, 0, 0, .2);
     }
 </style>

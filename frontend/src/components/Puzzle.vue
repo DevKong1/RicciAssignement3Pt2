@@ -74,6 +74,10 @@ export default {
 </script>
 
 <style scoped>
+  h1 {
+    color: #0257bc;
+  }
+  
   h3 {
     margin: 40px 0 0;
   }
@@ -104,11 +108,5 @@ export default {
     grid-template-rows: repeat(3, 1fr);
     grid-column-gap: 1vmin;
     grid-row-gap: 1vmin;
-  }
-
-  .tile {
-    display: flex;
-    justify-content: center;
-    align-items: center;
   }
 </style>

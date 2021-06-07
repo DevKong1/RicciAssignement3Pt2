@@ -16,7 +16,7 @@ export default {
   computed: {
     style() {
       let selectedID = this.data.selectedPlayer
-      return selectedID != null ? `border: 7px solid ${this.getColor(selectedID)}` : '' 
+      return selectedID != null ? `border: 7px; box-shadow: 0 5px 20px ${this.getColor(selectedID)}, 0 5px 20px ${this.getColor(selectedID)}` : ''
     }
   }
 }
@@ -27,5 +27,9 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+
+  .tile img {
+      width: 100%;
   }
 </style>
