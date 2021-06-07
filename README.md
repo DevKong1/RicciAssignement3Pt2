@@ -5,6 +5,6 @@ Dato che tutti i servizi vengono avviati sullo stesso container, per l'avvio del
 
 Per avviare il frontend è necessario utilizzare il seguente comando spostandosi all'interno della cartella frontend:
 
-`npm run serve`
+`npm i` seguito da `npm run serve`
 
 I servizi possono venire eseguiti in container o dispositivi diversi modificando unicamente le stringe contenenti gli indirizzi dei relativi servizi.
